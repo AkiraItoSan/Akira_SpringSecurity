@@ -142,5 +142,16 @@ public class User implements UserDetails {
         );
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", roles=" + roles +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 }
