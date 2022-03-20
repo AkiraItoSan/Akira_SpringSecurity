@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:sec="http://www.w3.org/1999/xhtml" lang="EU">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -49,7 +49,6 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Welcome to Index PAGE!</h1>
         </div>
-
         <div th:object="${authUser}">
             <p>
                 <code>Hello</code>
@@ -63,15 +62,11 @@
             </p>
             <code>Your roles are</code>
             <table>
-                <tr th:each="role : ${authUser.getRoles()}">
-                    <th th:text="${role}"></th>
-                </tr>
+                <p th:each="role : ${authUser.getRoles()}" th:text="${role}"></th>
+                </p>
             </table>
         </div>
-
         <br>
-
-
         <div sec:authorize="hasRole('ADMIN')">
             <form action="/admin/list" method="GET">
                 <button type="submit">User List</button>

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,10 +18,10 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private List<Role> roles;
 
     @Column(name = "password")
     private String password;
@@ -35,7 +36,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "enabled")
-    private boolean enabled;
+    private boolean enabled = true;
 
     public User() {
     }
@@ -47,11 +48,11 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
