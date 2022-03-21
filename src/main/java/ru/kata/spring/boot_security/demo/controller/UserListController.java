@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.dao.RoleRepository;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
@@ -20,8 +19,6 @@ public class UserListController {
     @Autowired
     UserService userService;
     @Autowired
-    RoleRepository roles;
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     @GetMapping(value = "/list")
@@ -29,17 +26,12 @@ public class UserListController {
         model.addAttribute(userService.listUsers());
         model.addAttribute("authUser", userService.findByEmail(authUser.getUsername()).orElseThrow());
         model.addAttribute("newuser", new User());
-
         return "admin-panel";
     }
 
     @PostMapping()
     public String create(@ModelAttribute("newuser") User user) {
-        System.out.println("create : " + user.toString());
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-//        System.out.println(string);
         userService.add(user);
         return "redirect:/admin/list";
     }
@@ -47,10 +39,7 @@ public class UserListController {
     @PostMapping("/{id}")
     public String update(@ModelAttribute("editUser") User user,
                          @PathVariable("id") Long id) {
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        System.out.println("update : " + user.toString());
         userService.add(user);
 
         return "redirect:/admin/list";
@@ -58,7 +47,6 @@ public class UserListController {
 
     @GetMapping("/{id}/delete")
     public String delete(@ModelAttribute("user") User user, Model model) {
-
         userService.remove(user);
         return "redirect:/admin/list";
     }

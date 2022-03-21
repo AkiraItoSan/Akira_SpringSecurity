@@ -26,7 +26,8 @@
                 <th scope="row" th:text="${oneUser.getFirstName()}">...</th>
                 <th scope="row" th:text="${oneUser.getLastName()}">...</th>
                 <th scope="row" th:text="${oneUser.getEmail()}">...</th>
-                <th scope="row"> <span th:each="roleStr : ${oneUser.getRoles()}" th:text="${roleStr} + ' '">...</span></th>
+                <th scope="row"><span th:each="roleStr : ${oneUser.getRoles()}" th:text="${roleStr} + ' '">...</span>
+                </th>
                 <td>
                     <a th:href="${'#editEmployeeModal' + oneUser.getId()}"
                        class="edit btn btn-info"

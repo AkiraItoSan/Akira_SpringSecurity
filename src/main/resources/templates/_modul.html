@@ -6,7 +6,8 @@
 </head>
 <body>
 
-<div th:each="editUser : ${userList}" th:id="${'editEmployeeModal' + editUser.getId()}" th:fragment="editEmployeeModal" class="modal fade">
+<div th:each="editUser : ${userList}" th:id="${'editEmployeeModal' + editUser.getId()}" th:fragment="editEmployeeModal"
+     class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form th:method="POST" th:action="@{/admin/{id}(id=${editUser.getId()})}">
@@ -66,7 +67,8 @@
     </div>
 </div>
 
-<div th:each="deliteUser : ${userList}" th:id="${'deliteEmployeeModal' + deliteUser.getId()}" th:fragment="deliteEmployeeModal" class="modal fade">
+<div th:each="deliteUser : ${userList}" th:id="${'deliteEmployeeModal' + deliteUser.getId()}"
+     th:fragment="deliteEmployeeModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form th:method="GET" th:action="@{/admin/{id}(id=${deliteUser.getId()})}">
