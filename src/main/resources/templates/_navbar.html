@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="EN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow" th:fragment="navbar">
+    <div class="col-6 bg-dark text-white">
+                    <span class="navbar-text text-end">
+                      <strong><a th:text="${authUser.getEmail()}">...</a></strong>
+                    </span>
+        <span class="text-start">with roles:
+                        <a th:each="roleStr : ${authUser.getRoles()}" th:text="${roleStr} + ' '"></a>
+                    </span>
+    </div>
+    <ul class="navbar-nav px-4">
+        <li class="nav-item text-nowrap">
+                <a class="nav-link" href="/logout">logout</a>
+        </li>
+    </ul>
+</nav>
+
+<div th:fragment="leftmenu">
+    <ul class="nav flex-sm-column">
+        <li class="nav-item">
+            <a class="nav-link" href="#" th:href="@{/admin/list}" aria-current="page">Admin</a>
+        </li>
+<!--        active bg-primary text-white-->
+        <li class="nav-item">
+            <a class="nav-link" href="#" th:href="@{/user}">User</a>
+        </li>
+    </ul>
+</div>
+
+
+</body>
+</html>
