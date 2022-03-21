@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="EN">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,18 +19,18 @@
     </div>
     <ul class="navbar-nav px-4">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="/logout">logout</a>
+                <a class="nav-link" href="/logout">logout</a>
         </li>
     </ul>
 </nav>
 
 <div th:fragment="leftmenu">
     <ul class="nav flex-sm-column">
-        <li class="nav-item">
-            <a class="nav-link" href="#" th:href="@{/admin/list}" aria-current="page">Admin</a>
+        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI().equals('/admin/list') ? 'active bg-primary text-white' : ''}" href="#" th:href="@{/admin/list}" aria-current="page">Admin</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" th:href="@{/user}">User</a>
+        <li class="nav-item" sec:authorize="hasRole('USER')">
+            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI().equals('/user') ? 'active bg-primary text-white' : ''}" href="#" th:href="@{/user}">User</a>
         </li>
     </ul>
 </div>
