@@ -14,7 +14,7 @@
                       <strong><a th:text="${authUser.getEmail()}">...</a></strong>
                     </span>
         <span class="text-start">with roles:
-                        <a th:each="roleStr : ${authUser.getRoles()}" th:text="${roleStr} + ' '"></a>
+                        <a th:each="roleStr : ${authUser.getAuthorities()}" th:text="${roleStr} + ' '"></a>
                     </span>
     </div>
     <ul class="navbar-nav px-4">

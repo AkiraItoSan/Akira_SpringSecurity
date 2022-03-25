@@ -18,8 +18,8 @@ public class Role implements GrantedAuthority {
     @Column(name = "role_name")
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<User> users;
 
     public Role() {
     }
@@ -46,13 +46,13 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+//    public Set<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
 
 
     @Override
@@ -60,11 +60,11 @@ public class Role implements GrantedAuthority {
         if (this == o) return true;
         if (!(o instanceof Role)) return false;
         Role role = (Role) o;
-        return id.equals(role.id) && roleName.equals(role.roleName) && Objects.equals(users, role.users);
+        return id.equals(role.id) && roleName.equals(role.roleName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName, users);
+        return Objects.hash(id, roleName);
     }
 }

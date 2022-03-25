@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script th:fragment="usersTableJS" type="text/javascript">
+    const URLUserAPI = 'http://localhost:8080/api/users'
+    const usersTable = document.querySelector('#allUsersTable');
+
+    const userFetchService = {
+        head: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Referer': null
+        },
+
+        updateUser: async (user) => await fetch(URLUserAPI, {
+            method: 'PUT',
+            headers: userFetchService.head,
+            body: JSON.stringify(user)
+        }),
+        createUser: async (user) => await fetch(URLUserAPI, {
+            method: 'POST',
+            headers: userFetchService.head,
+            body: JSON.stringify(user)
+        }),
+        deleteUser: async (id) => await fetch(URLUserAPI + `/${id}`, {
+            method: 'DELETE',
+            headers: userFetchService.head
+        })
+    }
+
+
+    //заполнение таблицы всех пользователей
+    let fillTable = (users) => {
+        let output = '';
+        users.forEach(user => {
+            let roleOfUser = '';
+            for (let a of user.authorities) {
+                roleOfUser += a.authority.replace("ROLE_", "") + " ";
+            }
+            output += `
+                  <tr>
+                    <th scope="row">${user.id}</th>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>${user.email}</td>
+                    <td>${roleOfUser}</td>
+                    <td>
+                    <a /*th:href="@{/api/users/${user.id}}"*/
+                       class="edit btn btn-info text-white eBtn"
+                       data-toggle="modal" value="${user.id}"><span>Edit</span></a>
+                </td>
+                <td>
+                    <a /*th:href="@{/api/users/${user.id}}"*/
+                       class="btn btn-danger text-white delBtn"
+                       data-toggle="modal" value="${user.id}"><span>Delete</span></a>
+                </td>
+                  </tr>
+    `;
+        });
+        usersTable.innerHTML = output;
+    }
+
+    //Функция обновления таблицы юзеров
+    function refreshAllUsersTable() {
+        fetch(URLUserAPI)
+            .then(response => response.json())
+            .then((data) => {
+                fillTable(data);
+                allModalButtonRegistration();
+                modalButtonListeners();
+            });
+    }
+
+    refreshAllUsersTable();
+
+    //регистрация "слушателей" кнопок ("Редактировать" и "Удалить") для открытия модалок
+    let allModalButtonRegistration = () => {
+
+        $(document).ready(function () {
+
+            //функция обработки нажатия кнопки "Редактировать" в таблице всех пользователей
+            $('.table .eBtn').on('click', function (event) {
+                event.preventDefault();
+                const userId = $(this).attr('value');
+                let href = URLUserAPI + "/" + userId;
+                console.log('href=' + href)
+
+                /*запрос JQuery к базе данных*/
+                $.get(href, function (user, status) {
+                    $('.myEditForm #id').val(user.id);
+                    $('.myEditForm #firstName').val(user.firstName);
+                    $('.myEditForm #lastName').val(user.lastName);
+                    $('.myEditForm #email').val(user.username);
+                    $('.myEditForm #password').val(user.password);
+                    $('.myEditForm #authorities').val(user.authorities);
+                });
+
+                $('.myEditForm #editEmployeeModal').modal();
+            });
+
+            //функция обработки нажатия кнопки "Удалить" в таблице всех пользователей
+            $('.table .delBtn').on('click', function (event) {
+                event.preventDefault();
+                const userId = $(this).attr('value');
+                let href = URLUserAPI + "/" + userId;
+                console.log('href=' + href);
+
+                /*запрос JQuery к базе данных*/
+                $.get(href, function (user, status) {
+                    $('.myDeleteForm #id').val(user.id);
+                    $('.myDeleteForm #firstName').val(user.firstName);
+                    $('.myDeleteForm #lastName').val(user.lastName);
+                    $('.myDeleteForm #email').val(user.username);
+                    $('.myDeleteForm #password').val(user.password);
+                    $('.myDeleteForm #authorities').val(user.authorities);
+                    let dB = $('.myDeleteForm #modalDelButton');
+                    dB[0].setAttribute('data-userid', user.id);
+                });
+
+                $('.myDeleteForm #deleteEmployeeModal').modal();
+            });
+
+
+        });
+
+    };
+
+    let modalButtonListeners = () => {
+        //функция обработки нажатия кнопки "Удалить" в модалке
+        $("#deleteEmployeeModal").find('#modalDelButton').on('click', async (event) => {
+
+            let delModal = $('#deleteEmployeeModal');
+
+            let id = delModal.find('#id').val().trim();
+            await userFetchService.deleteUser(id);
+
+            delModal.modal('hide');
+            fetch(URLUserAPI)
+                .then(response => response.json())
+                .then((data) => {
+                    fillTable(data);
+                    allModalButtonRegistration();
+                });
+        })
+
+        //функция обработки нажатия кнопки "Редактировать" в модалке
+        $("#editEmployeeModal").find('#modalEditButton').on('click', async (event) => {
+
+            let editModal = $('#editEmployeeModal');
+
+            let id = editModal.find('#id').val().trim();
+            let firstName = editModal.find('#firstName').val().trim();
+            let lastName = editModal.find('#lastName').val().trim();
+            let email = editModal.find('#email').val().trim();
+            let password = editModal.find('#password').val().trim();
+            let authorities = editModal.find('#authorities').val();
+            let roles = [];
+
+            authorities.forEach(roleId => {
+                roles.push({
+                    id: +roleId, roleName: roleId == 1 ? "ROLE_ADMIN" : "ROLE_USER"
+                });
+            })
+
+            let user = {
+                id: id,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                authorities: roles
+            }
+            await userFetchService.updateUser(user);
+
+            editModal.modal('hide');
+            fetch(URLUserAPI)
+                .then(response => response.json())
+                .then((data) => {
+                    fillTable(data);
+                    allModalButtonRegistration();
+                });
+        })
+
+        //Создание нового юзера
+        $("#newUser").find('#addNewUserButton').on('click', async (event) => {
+
+            let editModal = $('#newUser');
+
+            let firstName = editModal.find('#firstName').val().trim();
+            let lastName = editModal.find('#lastName').val().trim();
+            let email = editModal.find('#email').val().trim();
+            let password = editModal.find('#password').val().trim();
+            let authorities = editModal.find('#authorities').val();
+            let roles = [];
+
+            authorities.forEach(roleId => {
+                roles.push({
+                    id: +roleId, roleName: roleId == 1 ? "ROLE_ADMIN" : "ROLE_USER"
+                });
+            })
+
+            let user = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                authorities: roles
+            }
+            await userFetchService.createUser(user);
+
+            fetch(URLUserAPI)
+                .then(response => response.json())
+                .then((data) => {
+                    fillTable(data);
+                    allModalButtonRegistration();
+                });
+        })
+    };
+
+
+</script>
+
+</body>
+</html>

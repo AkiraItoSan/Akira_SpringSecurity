@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="EN" >
+<html lang="EN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -11,10 +11,10 @@
     <title>Spring Security Example</title>
 </head>
 <body>
-<div class="container_fluid" th:insert="_navbar :: navbar">
+<div class="container_fluid" th:insert="fragments/_navbar :: navbar">
 </div>
 <div class="row mt-5">
-    <div class="col-2 fixed-left" th:insert="_navbar :: leftmenu"></div>
+    <div class="col-2 fixed-left" th:insert="fragments/_navbar :: leftmenu"></div>
 
     <div class="col-9 ">
         <h1 class="row">User information-page</h1>
@@ -37,7 +37,7 @@
                         <th scope="row" th:text="${authUser.firstName}">...</th>
                         <th scope="row" th:text="${authUser.lastName}">...</th>
                         <th scope="row" th:text="${authUser.email}">...</th>
-                        <th scope="row"><span th:each="roleStr : ${authUser.getRoles()}"
+                        <th scope="row"><span th:each="roleStr : ${authUser.getAuthorities()}"
                                               th:text="${roleStr} + ' '">...</span></th>
                     </tr>
                     </tbody>

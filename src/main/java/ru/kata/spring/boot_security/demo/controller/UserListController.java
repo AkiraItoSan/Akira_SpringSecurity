@@ -23,31 +23,31 @@ public class UserListController {
 
     @GetMapping(value = "/list")
     public String printUsers(@AuthenticationPrincipal org.springframework.security.core.userdetails.User authUser, ModelMap model) {
-        model.addAttribute(userService.listUsers());
+//        model.addAttribute(userService.listUsers());
         model.addAttribute("authUser", userService.findByEmail(authUser.getUsername()).orElseThrow());
-        model.addAttribute("newuser", new User());
+//        model.addAttribute("newUser", new User());
         return "admin-panel";
     }
 
-    @PostMapping()
-    public String create(@ModelAttribute("newuser") User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.add(user);
-        return "redirect:/admin/list";
-    }
+//    @PostMapping()
+//    public String create(@ModelAttribute("newUser") User user) {
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        userService.add(user);
+//        return "redirect:/admin/list";
+//    }
 
-    @PostMapping("/{id}")
-    public String update(@ModelAttribute("editUser") User user,
-                         @PathVariable("id") Long id) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.add(user);
-
-        return "redirect:/admin/list";
-    }
-
-    @GetMapping("/{id}/delete")
-    public String delete(@ModelAttribute("user") User user, Model model) {
-        userService.remove(user);
-        return "redirect:/admin/list";
-    }
+//    @PostMapping("/{id}")
+//    public String update(@ModelAttribute("editUser") User user,
+//                         @PathVariable("id") Long id) {
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        userService.add(user);
+//
+//        return "redirect:/admin/list";
+//    }
+//
+//    @GetMapping("/{id}/delete")
+//    public String delete(@ModelAttribute("user") User user, Model model) {
+//        userService.remove(user);
+//        return "redirect:/admin/list";
+//    }
 }

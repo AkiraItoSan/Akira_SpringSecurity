@@ -41,4 +41,10 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByEmail(String email) {
         return userDao.findByEmail(email);
     }
+
+    @Override
+    public void removeUserById(long id) {
+        userDao.deleteById(id);
+    }
+
 }
