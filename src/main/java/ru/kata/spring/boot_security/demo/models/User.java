@@ -150,7 +150,7 @@ public class User implements UserDetails {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", enabled=" + enabled +
-                '}';
+                '}dasdas';
     }
 
     @Override
