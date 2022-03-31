@@ -21,8 +21,6 @@ public class UserListController {
     UserService userService;
     @Autowired
     RoleRepository roles;
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @GetMapping(value = "/list")
     public String printUsers(@AuthenticationPrincipal org.springframework.security.core.userdetails.User authUser, ModelMap model) {
@@ -36,10 +34,6 @@ public class UserListController {
     @PostMapping()
     public String create(@ModelAttribute("newuser") User user) {
         System.out.println("create : " + user.toString());
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-//        System.out.println(string);
         userService.add(user);
         return "redirect:/admin/list";
     }
@@ -47,8 +41,6 @@ public class UserListController {
     @PostMapping("/{id}")
     public String update(@ModelAttribute("editUser") User user,
                          @PathVariable("id") Long id) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         System.out.println("update : " + user.toString());
         userService.add(user);
