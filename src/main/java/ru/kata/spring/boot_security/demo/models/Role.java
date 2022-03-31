@@ -18,9 +18,6 @@ public class Role implements GrantedAuthority {
     @Column(name = "role_name")
     private String roleName;
 
-//    @ManyToMany(mappedBy = "roles")
-//    private Set<User> users;
-
     public Role() {
     }
 
@@ -45,15 +42,6 @@ public class Role implements GrantedAuthority {
     public void setId(Long id) {
         this.id = id;
     }
-
-//    public Set<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
-//    }
-
 
     @Override
     public boolean equals(Object o) {

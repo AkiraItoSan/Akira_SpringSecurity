@@ -19,9 +19,7 @@ public class UserController {
     @GetMapping(value = "/user")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public String welcomePage(@AuthenticationPrincipal User authUser, Model model) {
-
         model.addAttribute("authUser", userService.findByEmail(authUser.getUsername()).orElseThrow());
-
         return "index";
     }
 }
